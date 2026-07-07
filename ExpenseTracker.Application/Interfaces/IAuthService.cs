@@ -1,6 +1,6 @@
 using ExpenseTracker.Application.DTOs;
 
-namespace ExpenseTracker.Application.Services;
+namespace ExpenseTracker.Application.Interfaces;
 
 public interface IAuthService
 {
