@@ -2,7 +2,7 @@ using ExpenseTracker.Domain.Entities;
 
 namespace ExpenseTracker.Domain.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository: IRepository<User>
 {
     Task<User?> GetByEmailAsync(string email);
     Task<bool> EmailExistsAsync(string email);
