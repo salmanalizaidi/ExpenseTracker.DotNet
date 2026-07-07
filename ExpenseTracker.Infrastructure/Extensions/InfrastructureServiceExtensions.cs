@@ -19,6 +19,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
