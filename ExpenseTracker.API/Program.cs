@@ -1,4 +1,5 @@
 using System.Text;
+using ExpenseTracker.API.Middleware;
 using ExpenseTracker.Application.Extensions;
 using ExpenseTracker.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,6 +40,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
