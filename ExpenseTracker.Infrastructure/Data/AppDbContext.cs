@@ -9,7 +9,11 @@ public class AppDbContext: DbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<Expense> Expenses { get; set; }
+    public DbSet<Transaction> Expenses { get; set; }
+    public DbSet<Budget> Budgets { get; set; }
+    public DbSet<BudgetCategory> BudgetCategories { get; set; }
+    public DbSet<SavingsGoal> SavingsGoals { get; set; }
+    public DbSet<ScheduledPayment> ScheduledPayments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,7 +22,7 @@ public class AppDbContext: DbContext
         // Global soft delete filter
         //NOTE: This tells EF Core to automatically append WHERE IsDeleted = false to every query on that entity.
         modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
-        modelBuilder.Entity<Expense>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<Transaction>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<Category>().HasQueryFilter(c => !c.IsDeleted);
 
         // User
@@ -43,8 +47,8 @@ public class AppDbContext: DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // Expense
-        modelBuilder.Entity<Expense>(entity =>
+        // Transaction
+        modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
@@ -58,5 +62,16 @@ public class AppDbContext: DbContext
                 .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+        
+        // Soft delete filter — needed on every entity
+        modelBuilder.Entity<Transaction>().HasQueryFilter(t => !t.IsDeleted);
+        modelBuilder.Entity<Budget>().HasQueryFilter(b => !b.IsDeleted);
+        modelBuilder.Entity<BudgetCategory>().HasQueryFilter(bc => !bc.IsDeleted);
+        modelBuilder.Entity<SavingsGoal>().HasQueryFilter(sg => !sg.IsDeleted);
+        modelBuilder.Entity<ScheduledPayment>().HasQueryFilter(sp => !sp.IsDeleted);
+        
+        // Decimal precision on any Amount field
+        modelBuilder.Entity<Transaction>()
+            .Property(t => t.Amount).HasPrecision(18, 2);
     }
 }

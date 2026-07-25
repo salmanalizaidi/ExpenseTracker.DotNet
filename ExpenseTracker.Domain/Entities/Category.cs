@@ -11,5 +11,5 @@ public class Category: BaseEntity
     public Guid UserId { get; set; }
     
     public User User { get; set; } = null!;
-    public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
+    public ICollection<Transaction> Expenses { get; set; } = new List<Transaction>();
 }

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories;
 
-public class ExpenseRepository : BaseRepository<Expense>, IExpenseRepository
+public class ExpenseRepository : BaseRepository<Transaction>, IExpenseRepository
 {
     public ExpenseRepository(AppDbContext context) : base(context) { }
 
-    public async Task<IEnumerable<Expense>> GetByUserIdAsync(Guid userId) =>
+    public async Task<IEnumerable<Transaction>> GetByUserIdAsync(Guid userId) =>
         await _dbSet.Where(e => e.UserId == userId).ToListAsync();
 
-    public async Task<IEnumerable<Expense>> GetByCategoryIdAsync(Guid categoryId) =>
+    public async Task<IEnumerable<Transaction>> GetByCategoryIdAsync(Guid categoryId) =>
         await _dbSet.Where(e => e.CategoryId == categoryId).ToListAsync();
 }

@@ -25,7 +25,7 @@ public class ExpenseService: IExpenseService
 
     public async Task<ExpenseDto> CreateAsync(Guid userId, CreateExpenseDto dto)
     {
-        var expense = dto.Adapt<Expense>();
+        var expense = dto.Adapt<Transaction>();
         expense.UserId = userId;
         await _expenseRepository.AddAsync(expense);
         await _unitOfWork.SaveChangesAsync();

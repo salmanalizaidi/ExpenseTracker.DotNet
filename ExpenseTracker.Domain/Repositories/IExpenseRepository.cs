@@ -2,8 +2,8 @@ using ExpenseTracker.Domain.Entities;
 
 namespace ExpenseTracker.Domain.Repositories;
 
-public interface IExpenseRepository: IRepository<Expense>
+public interface IExpenseRepository: IRepository<Transaction>
 {
-    Task<IEnumerable<Expense>> GetByUserIdAsync(Guid userId);
-    Task<IEnumerable<Expense>> GetByCategoryIdAsync(Guid categoryId);
+    Task<IEnumerable<Transaction>> GetByUserIdAsync(Guid userId);
+    Task<IEnumerable<Transaction>> GetByCategoryIdAsync(Guid categoryId);
 }
