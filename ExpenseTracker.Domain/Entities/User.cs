@@ -11,5 +11,5 @@ public class User: BaseEntity
     public string LastName { get; set; } = string.Empty;
     public DateTime LastLoginAt { get; set; }
     
-    public ICollection<Transaction> Expenses { get; set; } = new List<Transaction>();
+    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }
