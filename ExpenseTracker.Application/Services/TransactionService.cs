@@ -10,44 +10,44 @@ namespace ExpenseTracker.Application.Services;
 
 public class TransactionService: BaseService, ITransactionService
 {
-    private readonly IExpenseRepository _expenseRepository;
+    private readonly ITransactionRepository _transactionRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public TransactionService(IExpenseRepository expenseRepository, IUnitOfWork unitOfWork, 
+    public TransactionService(ITransactionRepository transactionRepository, IUnitOfWork unitOfWork, 
         IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
     {
-        _expenseRepository = expenseRepository;
+        _transactionRepository = transactionRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<IEnumerable<TransactionDto>> GetAllAsync() =>
-        (await _expenseRepository.GetByUserIdAsync(CurrentUserId)).Adapt<IEnumerable<TransactionDto>>();
+        (await _transactionRepository.GetByUserIdAsync(CurrentUserId)).Adapt<IEnumerable<TransactionDto>>();
 
     public async Task<TransactionDto?> GetByIdAsync(Guid id) =>
-        (await _expenseRepository.GetByIdAsync(id))?.Adapt<TransactionDto>();
+        (await _transactionRepository.GetByIdAsync(id))?.Adapt<TransactionDto>();
 
-    public async Task<TransactionDto> CreateAsync(Guid userId, CreateTransactionDto dto)
+    public async Task<TransactionDto> CreateAsync(CreateTransactionDto dto)
     {
-        var expense = dto.Adapt<Transaction>();
-        expense.UserId = userId;
-        await _expenseRepository.AddAsync(expense);
+        var transaction = dto.Adapt<Transaction>();
+        transaction.UserId = CurrentUserId;
+        await _transactionRepository.AddAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-        return expense.Adapt<TransactionDto>();
+        return transaction.Adapt<TransactionDto>();
     }
 
     public async Task<TransactionDto> UpdateAsync(Guid id, UpdateTransactionDto dto)
     {
-        var expense = await _expenseRepository.GetByIdAsync(id)
-                      ?? throw new KeyNotFoundException($"Expense {id} not found");
-        dto.Adapt(expense);
-        await _expenseRepository.UpdateAsync(expense);
+        var transaction = await _transactionRepository.GetByIdAsync(id)
+                          ?? throw new KeyNotFoundException($"Transaction {id} not found");
+        dto.Adapt(transaction);
+        await _transactionRepository.UpdateAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-        return expense.Adapt<TransactionDto>();
+        return transaction.Adapt<TransactionDto>();
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        await _expenseRepository.DeleteAsync(id);
+        await _transactionRepository.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();
     }
 }

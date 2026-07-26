@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories;
 
-public class TransactionRepository : BaseRepository<Transaction>, IExpenseRepository
+public class TransactionRepository : BaseRepository<Transaction>, ITransactionRepository
 {
     public TransactionRepository(AppDbContext context) : base(context) { }
 
