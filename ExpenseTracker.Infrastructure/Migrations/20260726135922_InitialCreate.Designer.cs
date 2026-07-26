@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260726123315_UsernameAttributeSetToUnique")]
-    partial class UsernameAttributeSetToUnique
+    [Migration("20260726135922_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,7 +256,7 @@ namespace ExpenseTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Domain.Entities.User", b =>

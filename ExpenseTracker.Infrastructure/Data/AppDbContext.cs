@@ -9,7 +9,7 @@ public class AppDbContext: DbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<Transaction> Expenses { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Budget> Budgets { get; set; }
     public DbSet<BudgetCategory> BudgetCategories { get; set; }
     public DbSet<SavingsGoal> SavingsGoals { get; set; }

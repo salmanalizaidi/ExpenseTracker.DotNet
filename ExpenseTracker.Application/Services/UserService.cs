@@ -36,4 +36,9 @@ public class UserService: BaseService, IUserService
         
         return user.Adapt<UserDto>();
     }
+
+    public async Task<User> GetUserByIdAsync()
+    {
+        return await _userRepository.GetByIdAsync(CurrentUserId) ?? throw new KeyNotFoundException("User not found");
+    }
 }

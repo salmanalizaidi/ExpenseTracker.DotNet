@@ -24,4 +24,11 @@ public class UserController: ControllerBase
         var response = await _userService.UpdateUserProfileAsync(request);
         return response;
     }
+
+    [HttpGet("profile")]
+    public async Task<User> GetProfile()
+    {
+        var response = await _userService.GetUserByIdAsync();
+        return response;
+    }
 }

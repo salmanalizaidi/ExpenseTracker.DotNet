@@ -253,7 +253,7 @@ namespace ExpenseTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Domain.Entities.User", b =>
