@@ -31,4 +31,11 @@ public class UserController: ControllerBase
         var response = await _userService.GetUserByIdAsync();
         return response;
     }
+
+    [HttpDelete("profile")]
+    public async Task<IActionResult> DeleteProfile()
+    {
+        await _userService.DeleteUserByIdAsync();
+        return NoContent();
+    }
 }

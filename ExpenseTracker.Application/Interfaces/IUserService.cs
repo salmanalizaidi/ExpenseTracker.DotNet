@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<UserDto> UpdateUserProfileAsync(UserProfileRequestDto profile);
     Task<User> GetUserByIdAsync();
+    Task<bool> DeleteUserByIdAsync();
 }

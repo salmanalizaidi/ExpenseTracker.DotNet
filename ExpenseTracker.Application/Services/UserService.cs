@@ -41,4 +41,10 @@ public class UserService: BaseService, IUserService
     {
         return await _userRepository.GetByIdAsync(CurrentUserId) ?? throw new KeyNotFoundException("User not found");
     }
+
+    public async Task<bool> DeleteUserByIdAsync()
+    {
+        await _userRepository.DeleteAsync(CurrentUserId);
+        return await _unitOfWork.SaveChangesAsync() > 0;
+    }
 }
