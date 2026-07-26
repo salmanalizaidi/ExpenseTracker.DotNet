@@ -14,4 +14,7 @@ public class UserRepository: BaseRepository<User>, IUserRepository
 
     public async Task<bool> EmailExistsAsync(string email) =>
         await _dbSet.AnyAsync(u => u.Email == email);
+    
+    public async Task<bool> UsernameExistsAsync(string username) =>
+        await _dbSet.AnyAsync(u => u.Username == username);
 }

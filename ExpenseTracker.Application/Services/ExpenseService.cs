@@ -1,17 +1,20 @@
+using ExpenseTracker.Application.Common;
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Interfaces;
 using ExpenseTracker.Domain.Entities;
 using ExpenseTracker.Domain.Repositories;
 using Mapster;
+using Microsoft.AspNetCore.Http;
 
 namespace ExpenseTracker.Application.Services;
 
-public class ExpenseService: IExpenseService
+public class ExpenseService: BaseService, IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ExpenseService(IExpenseRepository expenseRepository, IUnitOfWork unitOfWork)
+    public ExpenseService(IExpenseRepository expenseRepository, IUnitOfWork unitOfWork, 
+        IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
     {
         _expenseRepository = expenseRepository;
         _unitOfWork = unitOfWork;

@@ -31,6 +31,7 @@ public class AppDbContext: DbContext
             entity.HasKey(u => u.Id);
             entity.Property(u => u.Email).IsRequired().HasMaxLength(256);
             entity.HasIndex(u => u.Email).IsUnique();
+            entity.HasIndex(u => u.Username).IsUnique(); //TODO: RUN MIGRATIONS
             entity.Property(u => u.FirstName).IsRequired().HasMaxLength(100);
             entity.Property(u => u.LastName).IsRequired().HasMaxLength(100);
             entity.Property(u => u.PasswordHash).IsRequired();
@@ -54,11 +55,11 @@ public class AppDbContext: DbContext
             entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Amount).HasPrecision(18, 2);
             entity.HasOne(e => e.User)
-                .WithMany(u => u.Expenses)
+                .WithMany(u => u.Transactions)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             entity.HasOne(e => e.Category)
-                .WithMany(c => c.Expenses)
+                .WithMany(c => c.Transaction)
                 .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
