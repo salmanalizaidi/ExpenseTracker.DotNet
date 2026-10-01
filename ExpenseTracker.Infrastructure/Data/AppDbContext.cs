@@ -31,7 +31,7 @@ public class AppDbContext: DbContext
             entity.HasKey(u => u.Id);
             entity.Property(u => u.Email).IsRequired().HasMaxLength(256);
             entity.HasIndex(u => u.Email).IsUnique();
-            entity.HasIndex(u => u.Username).IsUnique(); //TODO: RUN MIGRATIONS
+            entity.HasIndex(u => u.Username).IsUnique();
             entity.Property(u => u.FirstName).IsRequired().HasMaxLength(100);
             entity.Property(u => u.LastName).IsRequired().HasMaxLength(100);
             entity.Property(u => u.PasswordHash).IsRequired();
