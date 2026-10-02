@@ -20,6 +20,9 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IBudgetRepository, BudgetRepository>();
+        services.AddScoped<ISavingsGoalRepository, SavingsGoalRepository>();
+        services.AddScoped<DataSeeder>();
 
         return services;
     }

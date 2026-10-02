@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace ExpenseTracker.Application.Services;
 
+/// <summary>
+/// Add Git Ignore files for cursor
+/// 
+/// </summary>
+
 public class TransactionService: BaseService, ITransactionService
 {
     private readonly ITransactionRepository _transactionRepository;

@@ -1,6 +1,7 @@
 using System.Text;
 using ExpenseTracker.API.Middleware;
 using ExpenseTracker.Application.Extensions;
+using ExpenseTracker.Infrastructure.Data;
 using ExpenseTracker.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -46,5 +47,14 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// Run seeder and exit when --seed flag is passed
+if (args.Contains("--seed"))
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+    return;
+}
 
 app.Run();
