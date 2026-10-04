@@ -7,22 +7,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpenseTracker.Domain\ExpenseTracker.Domain.csproj" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-      <PackageReference Include="FluentValidation" Version="12.1.1" />
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-      <PackageReference Include="Mapster" Version="10.0.9" />
-      <PackageReference Include="Mapster.DependencyInjection" Version="10.0.9" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+        <ProjectReference Include="..\ExpenseTracker.Domain\ExpenseTracker.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validators\" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+        <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+        <PackageReference Include="Mapster" Version="10.0.9" />
+        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Validators\" />
     </ItemGroup>
 
 </Project>

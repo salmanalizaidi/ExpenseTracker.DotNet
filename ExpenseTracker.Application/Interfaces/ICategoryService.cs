@@ -4,7 +4,7 @@ namespace ExpenseTracker.Application.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<CategoryDto>> GetAllAsync(Guid userId);
-    Task<CategoryDto> CreateAsync(Guid userId, CreateCategoryDto dto);
+    Task<IEnumerable<CategoryDto>> GetAllAsync();
+    Task<CategoryDto> CreateAsync(CreateCategoryDto dto);
     Task DeleteAsync(Guid id);
 }

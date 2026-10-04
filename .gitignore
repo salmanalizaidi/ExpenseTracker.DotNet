@@ -486,3 +486,13 @@ $RECYCLE.BIN/
 
 # ------
 appsettings.Development.json
+
+# Local secret overrides — never commit real connection strings/JWT secrets here
+appsettings.Local.json
+appsettings.*.Local.json
+*.secrets.json
+
+# Cursor and Claude Code local config — rules, skills, and machine state
+# All dev tooling lives here; none of it is source code worth committing
+.cursor/
+.claude/
