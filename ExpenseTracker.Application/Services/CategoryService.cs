@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ExpenseTracker.Application.Services;
 
-public class CategoryService: BaseService, ICategoryService
+public class CategoryService : BaseService, ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -20,13 +20,13 @@ public class CategoryService: BaseService, ICategoryService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetAllAsync(Guid userId) =>
-        (await _categoryRepository.GetByUserIdAsync(userId)).Adapt<IEnumerable<CategoryDto>>();
+    public async Task<IEnumerable<CategoryDto>> GetAllAsync() =>
+        (await _categoryRepository.GetByUserIdAsync(CurrentUserId)).Adapt<IEnumerable<CategoryDto>>();
 
-    public async Task<CategoryDto> CreateAsync(Guid userId, CreateCategoryDto dto)
+    public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
     {
         var category = dto.Adapt<Category>();
-        category.UserId = userId;
+        category.UserId = CurrentUserId;
         await _categoryRepository.AddAsync(category);
         await _unitOfWork.SaveChangesAsync();
         return category.Adapt<CategoryDto>();
