@@ -12,6 +12,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IUserService, UserService>();
         
         return services;
     }

@@ -1,35 +1,35 @@
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Interfaces;
-using ExpenseTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.API.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 [Authorize]
-public class UserController: ControllerBase
+public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-    
+
     public UserController(IUserService userService)
     {
         _userService = userService;
     }
-    
-    [HttpPatch("profile")]
-    public async Task<UserDto> UpdateProfile(UserProfileRequestDto request)
-    {
-        var response = await _userService.UpdateUserProfileAsync(request);
-        return response;
-    }
 
     [HttpGet("profile")]
-    public async Task<User> GetProfile()
+    public async Task<ActionResult<UserDto>> GetProfile()
+        => Ok(await _userService.GetUserByIdAsync());
+
+    [HttpPatch("profile")]
+    public async Task<ActionResult<UserDto>> UpdateProfile(UserProfileRequestDto request)
+        => Ok(await _userService.UpdateUserProfileAsync(request));
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
     {
-        var response = await _userService.GetUserByIdAsync();
-        return response;
+        await _userService.ChangePasswordAsync(dto);
+        return NoContent();
     }
 
     [HttpDelete("profile")]
