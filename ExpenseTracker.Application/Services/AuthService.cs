@@ -5,40 +5,54 @@ using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Interfaces;
 using ExpenseTracker.Domain.Entities;
 using ExpenseTracker.Domain.Repositories;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExpenseTracker.Application.Services;
 
-public class AuthService: IAuthService
+public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IConfiguration _configuration;
+    private readonly IValidator<RegisterDto> _registerValidator;
+    private readonly IValidator<LoginDto> _loginValidator;
 
-    public AuthService(IUserRepository userRepository, IUnitOfWork unitOfWork, IConfiguration configuration)
+    public AuthService(
+        IUserRepository userRepository,
+        IUnitOfWork unitOfWork,
+        IConfiguration configuration,
+        IValidator<RegisterDto> registerValidator,
+        IValidator<LoginDto> loginValidator)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _configuration = configuration;
+        _registerValidator = registerValidator;
+        _loginValidator = loginValidator;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
     {
+        var validation = await _registerValidator.ValidateAsync(dto);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.Errors);
+
         if (await _userRepository.EmailExistsAsync(dto.Email))
             throw new InvalidOperationException("Email already exists");
 
-        var user = new User()
+        var user = new User
         {
             Email = dto.Email,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
         };
-        
+
         await _userRepository.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
-        
+
         return new AuthResponseDto
         {
             Token = GenerateToken(user),
@@ -49,12 +63,16 @@ public class AuthService: IAuthService
 
     public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
     {
-        var user = await _userRepository.GetByEmailAsync(dto.Email) ?? 
-                   throw new UnauthorizedAccessException("Invalid email or password");
-        
-        if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+        var validation = await _loginValidator.ValidateAsync(dto);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.Errors);
+
+        var user = await _userRepository.GetByEmailAsync(dto.Email)
+                   ?? throw new UnauthorizedAccessException("Invalid email or password");
+
+        if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             throw new UnauthorizedAccessException("Invalid email or password");
-        
+
         user.LastLoginAt = DateTime.UtcNow;
         await _userRepository.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();

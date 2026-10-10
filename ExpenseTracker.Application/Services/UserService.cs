@@ -12,15 +12,20 @@ public class UserService : BaseService, IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<UserProfileRequestDto> _validatorUserProfileRequestDto;
+    private readonly IValidator<UserProfileRequestDto> _profileValidator;
+    private readonly IValidator<ChangePasswordDto> _changePasswordValidator;
 
-    public UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository,
-        IUnitOfWork unitOfWork, IValidator<UserProfileRequestDto> validatorUserProfileRequestDto) :
-        base(httpContextAccessor)
+    public UserService(
+        IHttpContextAccessor httpContextAccessor,
+        IUserRepository userRepository,
+        IUnitOfWork unitOfWork,
+        IValidator<UserProfileRequestDto> profileValidator,
+        IValidator<ChangePasswordDto> changePasswordValidator) : base(httpContextAccessor)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
-        _validatorUserProfileRequestDto = validatorUserProfileRequestDto;
+        _profileValidator = profileValidator;
+        _changePasswordValidator = changePasswordValidator;
     }
 
     public async Task<UserDto> GetUserByIdAsync()
@@ -32,14 +37,14 @@ public class UserService : BaseService, IUserService
 
     public async Task<UserDto> UpdateUserProfileAsync(UserProfileRequestDto profile)
     {
-        var result = await _validatorUserProfileRequestDto.ValidateAsync(profile);
-        if (!result.IsValid)
-            throw new InvalidOperationException(result.Errors.First().ErrorMessage);
-        
+        var validation = await _profileValidator.ValidateAsync(profile);
+        if (!validation.IsValid)
+            throw new InvalidOperationException(validation.Errors.First().ErrorMessage);
+
         var user = await _userRepository.GetByIdAsync(CurrentUserId)
                    ?? throw new KeyNotFoundException("User not found");
 
-        // Only validate username uniqueness if it actually changed
+        // Uniqueness check only when the username actually changed
         if (user.Username != profile.Username &&
             await _userRepository.UsernameExistsAsync(profile.Username))
         {
@@ -64,6 +69,10 @@ public class UserService : BaseService, IUserService
 
     public async Task ChangePasswordAsync(ChangePasswordDto dto)
     {
+        var validation = await _changePasswordValidator.ValidateAsync(dto);
+        if (!validation.IsValid)
+            throw new InvalidOperationException(validation.Errors.First().ErrorMessage);
+
         var user = await _userRepository.GetByIdAsync(CurrentUserId)
                    ?? throw new KeyNotFoundException("User not found");
 
