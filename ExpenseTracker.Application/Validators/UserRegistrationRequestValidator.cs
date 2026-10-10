@@ -24,6 +24,6 @@ public class UserRegistrationRequestValidator: AbstractValidator<RegisterDto>
             .Matches("[a-z]").WithMessage("New password must contain at least one lowercase letter.")
             .Matches("[0-9]").WithMessage("New password must contain at least one number.")
             .Matches(@"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]")
-            .WithMessage("New password must contain at least one special character.")
+            .WithMessage("New password must contain at least one special character.");
     }
 }
