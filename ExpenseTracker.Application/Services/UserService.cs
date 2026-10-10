@@ -2,6 +2,7 @@ using ExpenseTracker.Application.Common;
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Interfaces;
 using ExpenseTracker.Domain.Repositories;
+using FluentValidation;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 
@@ -11,12 +12,15 @@ public class UserService : BaseService, IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UserProfileRequestDto> _validatorUserProfileRequestDto;
 
     public UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : base(httpContextAccessor)
+        IUnitOfWork unitOfWork, IValidator<UserProfileRequestDto> validatorUserProfileRequestDto) :
+        base(httpContextAccessor)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _validatorUserProfileRequestDto = validatorUserProfileRequestDto;
     }
 
     public async Task<UserDto> GetUserByIdAsync()
@@ -28,6 +32,10 @@ public class UserService : BaseService, IUserService
 
     public async Task<UserDto> UpdateUserProfileAsync(UserProfileRequestDto profile)
     {
+        var result = await _validatorUserProfileRequestDto.ValidateAsync(profile);
+        if (!result.IsValid)
+            throw new InvalidOperationException(result.Errors.First().ErrorMessage);
+        
         var user = await _userRepository.GetByIdAsync(CurrentUserId)
                    ?? throw new KeyNotFoundException("User not found");
 
