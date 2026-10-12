@@ -9,8 +9,17 @@ public class TransactionRepository : BaseRepository<Transaction>, ITransactionRe
 {
     public TransactionRepository(AppDbContext context) : base(context) { }
 
+    public override async Task<Transaction?> GetByIdAsync(Guid id) =>
+        await _dbSet
+            .Include(t => t.Category)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
     public async Task<IEnumerable<Transaction>> GetByUserIdAsync(Guid userId) =>
-        await _dbSet.Where(e => e.UserId == userId).ToListAsync();
+        await _dbSet
+            .Include(t => t.Category)
+            .Where(e => e.UserId == userId)
+            .OrderByDescending(t => t.Date)
+            .ToListAsync();
 
     public async Task<IEnumerable<Transaction>> GetByCategoryIdAsync(Guid categoryId) =>
         await _dbSet.Where(e => e.CategoryId == categoryId).ToListAsync();

@@ -17,7 +17,7 @@ public class BaseRepository<T>: IRepository<T> where T : BaseEntity
         _dbSet = _dbContext.Set<T>();
     }
 
-    public async Task<T?> GetByIdAsync(Guid id) =>
+    public virtual async Task<T?> GetByIdAsync(Guid id) =>
         await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<ICollection<T>> GetAllAsync() => 
